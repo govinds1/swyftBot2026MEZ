@@ -141,7 +141,7 @@ public final class Autos {
         return new SequentialCommandGroup(
             // Turn to approx. face Hub and extend intake.
             Commands.parallel(
-                new AutonSwerveDistanceControlCommand(robotDrive, getShootingPose().relativeTo(getStartingPose())),
+                new AutonSwerveDistanceControlCommand(robotDrive, getShootingPose().relativeTo(getStartingPose()).getTranslation(), getShootingPose().getRotation()),
                 intake.extendAuto()
             ),
             // Shoot.

@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,13 +14,15 @@ public class AutonSwerveDistanceControlCommand extends Command {
     private DriveSubsystem m_drive;
 
     private Pose2d m_startingPose;
-    private Pose2d m_desiredPoseDelta; // desired pose relative to starting pose. Example -> (2, -3, Math.PI) means we move 2 meters forward, 3 meters right, 90 degree turn CCW
+    private Translation2d m_desiredTranslationDelta; // desired pose relative to starting pose. Example -> (2, -3) means we move 2 meters forward, 3 meters right
+    private Rotation2d m_desiredRotation; // desired angle (field relative) at the end of driving. Example -> 0 means we face opponent's driver station.
     private double startTime;
     
 
-public AutonSwerveDistanceControlCommand(DriveSubsystem subsystem, Pose2d desiredPoseDelta) {
+public AutonSwerveDistanceControlCommand(DriveSubsystem subsystem, Translation2d desiredTranslationDelta, Rotation2d desiredRotation) {
     m_drive = subsystem;
-    m_desiredPoseDelta = desiredPoseDelta;
+    m_desiredTranslationDelta = desiredTranslationDelta;
+    m_desiredRotation = desiredRotation;
     addRequirements(m_drive);
 }
 
@@ -36,7 +40,7 @@ public void execute() {
     // Get current pose.
     Pose2d currentPose = m_drive.getPose().relativeTo(m_startingPose);
     // Apply PID controllers to get output.
-    ChassisSpeeds newSpeeds = m_drive.m_robotDriveController.calculate(currentPose, m_desiredPoseDelta, 0, m_desiredPoseDelta.getRotation());
+    ChassisSpeeds newSpeeds = m_drive.m_robotDriveController.calculate(currentPose, new Pose2d(m_desiredTranslationDelta, m_desiredRotation), 0, m_desiredRotation);
     // Apply output to drive.
     m_drive.driveRobotRelative(newSpeeds);
 }
@@ -50,12 +54,13 @@ public void end(boolean interrupted) {
 // Returns true when the command should end.
 @Override
 public boolean isFinished() {
-    double maxAllowedTime = Math.max(Math.sqrt(m_desiredPoseDelta.getTranslation().getSquaredNorm()), 2.0);
+    double maxAllowedTime = Math.max(Math.sqrt(m_desiredTranslationDelta.getSquaredNorm()), 2.0);
     return (Timer.getFPGATimestamp() - startTime) > maxAllowedTime;
 }
 
 @Override
 public boolean runsWhenDisabled() {
         return false;
+
     }
 }
