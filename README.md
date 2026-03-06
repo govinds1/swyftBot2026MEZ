@@ -1,7 +1,7 @@
 # swyftBot2026MEZ
 ## Getting Started
 1. Follow FIRST's [Software Installation](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/index.html) steps to setup the 2026 WPILib VS Code editor.
-2. Download/Clone this repository to your computer. Make sure to save the folder outside of OneDrive. See [Git introduction](https://docs.wpilib.org/en/stable/docs/software/basic-programming/git-getting-started.html).
+2. Fork this repository to make a new repository for your team! Then clone/download the code to your laptop, making sure to save the folder outside of OneDrive. See [Git introduction](https://docs.wpilib.org/en/stable/docs/software/basic-programming/git-getting-started.html).
 3. Open the project folder in 2026 WPILib VS Code.
 4. [Build and deploy](https://docs.wpilib.org/en/stable/docs/software/vscode-overview/deploying-robot-code.html) the robot code using WPILib Command Palette (Ctrl+Shift+P).  
 
